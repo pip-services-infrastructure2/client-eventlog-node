@@ -1,18 +1,18 @@
-let os = require('os');
+const os = require('os');
 
 import { ConfigParams } from 'pip-services3-commons-nodex';
 import { FilterParams } from 'pip-services3-commons-nodex';
 import { PagingParams } from 'pip-services3-commons-nodex';
 import { DataPage } from 'pip-services3-commons-nodex';
-import { CommandableLambdaClient } from 'pip-services3-aws-nodex';
+import { CommandableHttpClient } from 'pip-services3-rpc-nodex';
 
 import { SystemEventV1 } from './SystemEventV1';
 import { IEventLogClientV1 } from './IEventLogClientV1';
 
-export class EventLogLambdaClientV1 extends CommandableLambdaClient implements IEventLogClientV1 {
+export class EventLogCommandableHttpClientV1 extends CommandableHttpClient implements IEventLogClientV1 {
 
     constructor(config?: any) {
-        super('eventlog');
+        super('v1/eventlog');
 
         if (config != null)
             this.configure(ConfigParams.fromValue(config));
@@ -39,10 +39,11 @@ export class EventLogLambdaClientV1 extends CommandableLambdaClient implements I
     }
 
     public async logEvent(correlationId: string, event: SystemEventV1): Promise<SystemEventV1> {
+
         event.time = event.time || new Date();
         event.source = event.source || os.hostname(); 
 
-        let timing = this.instrument(correlationId, 'eventlog.get_events');
+        let timing = this.instrument(correlationId, 'eventlog.log_event');
 
         try {
             return await this.callCommand(
@@ -59,5 +60,5 @@ export class EventLogLambdaClientV1 extends CommandableLambdaClient implements I
             timing.endTiming();
         }
     }
-    
+
 }
