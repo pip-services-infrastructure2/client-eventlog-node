@@ -1,5 +1,4 @@
 import { ConfigParams } from 'pip-services3-commons-nodex';
-import { IReferences } from 'pip-services3-commons-nodex';
 import { Descriptor } from 'pip-services3-commons-nodex';
 import { FilterParams } from 'pip-services3-commons-nodex';
 import { PagingParams} from 'pip-services3-commons-nodex';
@@ -24,12 +23,12 @@ export class EventLogDirectClientV1 extends DirectClient<any> implements IEventL
         let timing = this.instrument(correlationId, 'eventlog.get_events');
         
         try {
-            return await this._controller.getEvents(correlationId, filter, paging);
+            let res = await this._controller.getEvents(correlationId, filter, paging);
+            timing.endTiming();
+            return res;
         } catch (err) {
             timing.endFailure(err);
             throw err;
-        } finally {
-            timing.endTiming();
         }
     }
 
@@ -37,12 +36,12 @@ export class EventLogDirectClientV1 extends DirectClient<any> implements IEventL
         let timing = this.instrument(correlationId, 'eventlog.log_event');
         
         try {
-            return await this._controller.logEvent(correlationId, event);
+            let res = await this._controller.logEvent(correlationId, event);
+            timing.endTiming();
+            return res;
         } catch (err) {
             timing.endFailure(err);
             throw err;
-        } finally {
-            timing.endTiming();
         }
     }
 

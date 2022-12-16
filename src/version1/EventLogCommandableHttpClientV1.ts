@@ -19,23 +19,14 @@ export class EventLogCommandableHttpClientV1 extends CommandableHttpClient imple
     }
         
     public async getEvents(correlationId: string, filter: FilterParams, paging: PagingParams): Promise<DataPage<SystemEventV1>> {
-        let timing = this.instrument(correlationId, 'eventlog.get_events');
-
-        try {
-            return await this.callCommand(
-                'get_events',
-                correlationId,
-                {
-                    filter: filter,
-                    paging: paging
-                }
-            );
-        } catch (err) {
-            timing.endFailure(err);
-            throw err;
-        } finally {
-            timing.endTiming();
-        }
+        return await this.callCommand(
+            'get_events',
+            correlationId,
+            {
+                filter: filter,
+                paging: paging
+            }
+        );
     }
 
     public async logEvent(correlationId: string, event: SystemEventV1): Promise<SystemEventV1> {
@@ -43,22 +34,13 @@ export class EventLogCommandableHttpClientV1 extends CommandableHttpClient imple
         event.time = event.time || new Date();
         event.source = event.source || os.hostname(); 
 
-        let timing = this.instrument(correlationId, 'eventlog.log_event');
-
-        try {
-            return await this.callCommand(
-                'log_event',
-                correlationId,
-                {
-                    event: event
-                }
-            );
-        } catch (err) {
-            timing.endFailure(err);
-            throw err;
-        } finally {
-            timing.endTiming();
-        }
+        return await this.callCommand(
+            'log_event',
+            correlationId,
+            {
+                event: event
+            }
+        );
     }
 
 }

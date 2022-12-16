@@ -21,39 +21,19 @@ class EventLogCommandableHttpClientV1 extends pip_services3_rpc_nodex_1.Commanda
     }
     getEvents(correlationId, filter, paging) {
         return __awaiter(this, void 0, void 0, function* () {
-            let timing = this.instrument(correlationId, 'eventlog.get_events');
-            try {
-                return yield this.callCommand('get_events', correlationId, {
-                    filter: filter,
-                    paging: paging
-                });
-            }
-            catch (err) {
-                timing.endFailure(err);
-                throw err;
-            }
-            finally {
-                timing.endTiming();
-            }
+            return yield this.callCommand('get_events', correlationId, {
+                filter: filter,
+                paging: paging
+            });
         });
     }
     logEvent(correlationId, event) {
         return __awaiter(this, void 0, void 0, function* () {
             event.time = event.time || new Date();
             event.source = event.source || os.hostname();
-            let timing = this.instrument(correlationId, 'eventlog.log_event');
-            try {
-                return yield this.callCommand('log_event', correlationId, {
-                    event: event
-                });
-            }
-            catch (err) {
-                timing.endFailure(err);
-                throw err;
-            }
-            finally {
-                timing.endTiming();
-            }
+            return yield this.callCommand('log_event', correlationId, {
+                event: event
+            });
         });
     }
 }

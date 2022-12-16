@@ -24,14 +24,13 @@ class EventLogDirectClientV1 extends pip_services3_rpc_nodex_1.DirectClient {
         return __awaiter(this, void 0, void 0, function* () {
             let timing = this.instrument(correlationId, 'eventlog.get_events');
             try {
-                return yield this._controller.getEvents(correlationId, filter, paging);
+                let res = yield this._controller.getEvents(correlationId, filter, paging);
+                timing.endTiming();
+                return res;
             }
             catch (err) {
                 timing.endFailure(err);
                 throw err;
-            }
-            finally {
-                timing.endTiming();
             }
         });
     }
@@ -39,14 +38,13 @@ class EventLogDirectClientV1 extends pip_services3_rpc_nodex_1.DirectClient {
         return __awaiter(this, void 0, void 0, function* () {
             let timing = this.instrument(correlationId, 'eventlog.log_event');
             try {
-                return yield this._controller.logEvent(correlationId, event);
+                let res = yield this._controller.logEvent(correlationId, event);
+                timing.endTiming();
+                return res;
             }
             catch (err) {
                 timing.endFailure(err);
                 throw err;
-            }
-            finally {
-                timing.endTiming();
             }
         });
     }
